@@ -1,12 +1,16 @@
 package net.andrewcpu.solids;
 
-import net.andrewcpu.solids.behaviors.ForceRecord;
+import net.andrewcpu.model.ForceRecord;
 import net.andrewcpu.solids.behaviors.SolidBehavior;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Ether class represents a generic ether particle in a simulation.
+ * It contains properties and methods common to all ether particles.
+ */
 public abstract class Ether {
     private List<ForceRecord> forceRecords; // last force record
     private SolidBehavior solidBehavior;
@@ -44,10 +48,19 @@ public abstract class Ether {
         this.forceRecords.add(forceRecord);
     }
     public void applyWave(double force, double velocity) {
-        this.value += (force * forceDampening);
-        this.velocity += (velocity * velocityDamping);
+        if(getSolidBehavior().isPermeable()) {
+            this.value += (force * forceDampening);
+            this.velocity += (velocity * velocityDamping);
+        }
     }
 
+    /**
+     * Update the velocity and value of the ether particle based on the accumulated force records.
+     * If there are no force records, no update is performed.
+     * The velocity is updated first by accumulating the delta velocities from all the force records.
+     * Then, the value is updated based on the new velocity.
+     * Finally, the force records are cleared.
+     */
     public void commit() {
         if(this.forceRecords.isEmpty()) return;
         double vel = 0.0;

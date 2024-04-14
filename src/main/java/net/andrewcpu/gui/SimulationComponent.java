@@ -1,11 +1,12 @@
-package net.andrewcpu;
+package net.andrewcpu.gui;
+
+import net.andrewcpu.Pond;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.InvocationTargetException;
 
-public class SimComponent extends JComponent implements KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
+public class SimulationComponent extends JComponent implements KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
     public Pond pond;
     private boolean mouseDown = false;
     private int mouseX = 0, mouseY = 0;
@@ -15,7 +16,7 @@ public class SimComponent extends JComponent implements KeyListener, MouseWheelL
     private int panX = 0, panY = 0;
     private double minZoomLevel = 1.0;
 
-    public SimComponent() {
+    public SimulationComponent() {
         this.pond = new Pond();
         addKeyListener(this);
     }

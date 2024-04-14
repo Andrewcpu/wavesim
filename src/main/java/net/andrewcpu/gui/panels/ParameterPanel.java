@@ -1,4 +1,4 @@
-package net.andrewcpu.gui;
+package net.andrewcpu.gui.panels;
 
 import net.andrewcpu.model.DynamicConstructionDescription;
 import net.andrewcpu.model.KeyPairEnum;

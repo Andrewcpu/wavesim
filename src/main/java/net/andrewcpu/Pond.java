@@ -2,7 +2,7 @@
 
 package net.andrewcpu;
 
-import net.andrewcpu.gui.BehaviorPanel;
+import net.andrewcpu.gui.panels.BehaviorPanel;
 import net.andrewcpu.solids.Ether;
 import net.andrewcpu.solids.behaviors.impl.ChargedSolidBehavior;
 import net.andrewcpu.solids.impl.DynamicMaterial;

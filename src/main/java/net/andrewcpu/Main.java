@@ -1,13 +1,12 @@
 package net.andrewcpu;
 
-import net.andrewcpu.gui.MainUI;
+import net.andrewcpu.gui.SidebarUI;
+import net.andrewcpu.gui.SimulationComponent;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import static net.andrewcpu.Pond.POND_SIZE;
 
 public class Main extends JFrame {
     public static void main(String[] args) {
@@ -16,14 +15,14 @@ public class Main extends JFrame {
 
     public Main() {
         int dim = 800;
-        SimComponent simComponent = new SimComponent();
-        simComponent.setFocusable(true);
-        simComponent.setPreferredSize(new Dimension(dim, dim)); // Define preferred size for layout management
+        SimulationComponent simulationComponent = new SimulationComponent();
+        simulationComponent.setFocusable(true);
+        simulationComponent.setPreferredSize(new Dimension(dim, dim)); // Define preferred size for layout management
 
-        MainUI mainUI = new MainUI(simComponent.pond); // Create an instance of your new MainUI panel
-        mainUI.setPreferredSize(new Dimension(400, dim)); // Optional: Set preferred size for MainUI
+        SidebarUI sidebarUI = new SidebarUI(simulationComponent.pond); // Create an instance of your new MainUI panel
+        sidebarUI.setPreferredSize(new Dimension(400, dim)); // Optional: Set preferred size for MainUI
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, simComponent, mainUI);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, simulationComponent, sidebarUI);
         splitPane.setDividerLocation(dim); // Set the initial position of the divider
         splitPane.setResizeWeight(0.5); // This sets the resize behavior
 
@@ -31,16 +30,16 @@ public class Main extends JFrame {
         pack(); // Adjusts the frame size to fit the components
         setLocationRelativeTo(null); // Center the frame on the screen
         setVisible(true);
-        mainUI.finishedLoading();
+        sidebarUI.finishedLoading();
 
-        simComponent.addKeyListener(simComponent);
-        simComponent.addMouseListener(simComponent);
-        simComponent.addMouseWheelListener(simComponent);
-        simComponent.addMouseMotionListener(simComponent);
+        simulationComponent.addKeyListener(simulationComponent);
+        simulationComponent.addMouseListener(simulationComponent);
+        simulationComponent.addMouseWheelListener(simulationComponent);
+        simulationComponent.addMouseMotionListener(simulationComponent);
 
         Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
             try {
-                simComponent.pond.step();
+                simulationComponent.pond.step();
             } catch (Exception e) {
                 e.printStackTrace();
             }

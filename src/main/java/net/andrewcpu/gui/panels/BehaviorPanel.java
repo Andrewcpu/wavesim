@@ -1,20 +1,16 @@
-package net.andrewcpu.gui;
+package net.andrewcpu.gui.panels;
 
 import net.andrewcpu.Pond;
 import net.andrewcpu.gui.renderers.ClassCellRenderer;
 import net.andrewcpu.gui.state.BehaviorState;
 import net.andrewcpu.model.DynamicConstructionDescription;
 import net.andrewcpu.solids.behaviors.SolidBehavior;
-import net.andrewcpu.solids.behaviors.impl.BlockingSolid;
-import net.andrewcpu.solids.behaviors.impl.PermeableSolid;
-import net.andrewcpu.solids.behaviors.impl.WaveGeneratorBehavior;
 import net.andrewcpu.solids.impl.DynamicMaterial;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -139,8 +135,6 @@ public class BehaviorPanel extends JPanel {
             parameterPanel.add(panel, BorderLayout.NORTH); // Ensure this is correctly using BorderLayout
         }
 
-//        parameterPanel.revalidate(); // Recalculate layout
-//        parameterPanel.repaint(); // Redraw the panel
         revalidate();
         repaint();
 

@@ -1,5 +1,6 @@
 package net.andrewcpu.solids.behaviors;
 
+import net.andrewcpu.model.ForceRecord;
 import net.andrewcpu.solids.Ether;
 
 public interface SolidBehavior {

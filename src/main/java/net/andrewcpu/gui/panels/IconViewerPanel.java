@@ -1,5 +1,7 @@
-package net.andrewcpu.gui;
+package net.andrewcpu.gui.panels;
 
+import net.andrewcpu.gui.IconItem;
+import net.andrewcpu.gui.renderers.IconListRenderer;
 import net.andrewcpu.model.SelectionListener;
 
 import javax.swing.*;
@@ -9,13 +11,13 @@ import java.util.function.BiFunction;
 
 public class IconViewerPanel {
 
-    private JList<IconListViewer.IconItem> list;
-    private DefaultListModel<IconListViewer.IconItem> model;
+    private JList<IconItem> list;
+    private DefaultListModel<IconItem> model;
     private JScrollPane scrollPane;
     private JPanel panel;
-    private BiFunction<String, DefaultListModel, IconListViewer.IconItem> duplicateCallback;
-    public IconViewerPanel(Vector<IconListViewer.IconItem> items, SelectionListener selectionListener,
-                           BiFunction<String, DefaultListModel, IconListViewer.IconItem> onDuplicate, Runnable onNew) {
+    private BiFunction<String, DefaultListModel, IconItem> duplicateCallback;
+    public IconViewerPanel(Vector<IconItem> items, SelectionListener selectionListener,
+                           BiFunction<String, DefaultListModel, IconItem> onDuplicate, Runnable onNew) {
         model = new DefaultListModel<>();
         items.forEach(model::addElement);
 
@@ -25,7 +27,7 @@ public class IconViewerPanel {
         list.setVisibleRowCount(1);
         list.setFixedCellHeight(80);
         list.setFixedCellWidth(80);
-        list.setCellRenderer(new IconListViewer.IconListRenderer());
+        list.setCellRenderer(new IconListRenderer());
         list.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && list.getSelectedValue() != null) {
                 selectionListener.selected(list.getSelectedValue().getFilePath());
@@ -66,22 +68,22 @@ public class IconViewerPanel {
         return panel;
     }
 
-    public void addItem(IconListViewer.IconItem item) {
+    public void addItem(IconItem item) {
         model.addElement(item); // Add an item
     }
 
-    public void removeItem(IconListViewer.IconItem item) {
+    public void removeItem(IconItem item) {
         model.removeElement(item); // Remove an item
     }
 
-    public void updateItem(IconListViewer.IconItem oldItem, IconListViewer.IconItem newItem) {
+    public void updateItem(IconItem oldItem, IconItem newItem) {
         int index = model.indexOf(oldItem);
         if (index != -1) {
             model.set(index, newItem); // Update the item in the model
         }
     }
 
-    public DefaultListModel<IconListViewer.IconItem> getModel() {
+    public DefaultListModel<IconItem> getModel() {
         return model;
     }
 }

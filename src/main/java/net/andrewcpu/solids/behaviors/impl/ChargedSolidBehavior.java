@@ -1,7 +1,7 @@
 package net.andrewcpu.solids.behaviors.impl;
 
 import net.andrewcpu.solids.Ether;
-import net.andrewcpu.solids.behaviors.ForceRecord;
+import net.andrewcpu.model.ForceRecord;
 
 import java.util.List;
 
@@ -14,7 +14,6 @@ public class ChargedSolidBehavior extends PermeableSolid {
     public ChargedSolidBehavior(double charge) {
         super(0.9, 0.001, DAMPING);
         this.charge = charge;
-//        this.oppositeChargedEthers = oppositeChargedEthers;
     }
 
     public void setOppositeChargedEthers(List<Ether> oppositeChargedEthers) {

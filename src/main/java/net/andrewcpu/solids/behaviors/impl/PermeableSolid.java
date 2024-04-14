@@ -1,7 +1,7 @@
 package net.andrewcpu.solids.behaviors.impl;
 
 import net.andrewcpu.solids.Ether;
-import net.andrewcpu.solids.behaviors.ForceRecord;
+import net.andrewcpu.model.ForceRecord;
 import net.andrewcpu.solids.behaviors.SolidBehavior;
 
 public class PermeableSolid implements SolidBehavior {
