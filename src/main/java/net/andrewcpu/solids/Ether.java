@@ -69,6 +69,8 @@ public abstract class Ether {
         }
         this.velocity += vel; // Update velocity first
         this.value += this.velocity; // Then update value based on new velocity
+        this.value *= 0.999;
+        this.velocity *= 0.999;
         forceRecords.clear();
     }
 
