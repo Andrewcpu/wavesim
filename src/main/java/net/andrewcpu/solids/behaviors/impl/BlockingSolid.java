@@ -1,10 +1,7 @@
-package net.andrewcpu.solids.impl;
+package net.andrewcpu.solids.behaviors.impl;
 
-import net.andrewcpu.solids.SolidBehavior;
-
-public class BlockingSolid implements SolidBehavior {
-    public void interact(double[][] pond, double[][] velocity, int i, int j, double[][] newPond, double[][] newVelocity) {
-        newPond[i][j] = 0;
-        newVelocity[i][j] = 0;
+public class BlockingSolid extends PermeableSolid {
+    public BlockingSolid() {
+        super(0.0, 0.0, 0.0);
     }
 }

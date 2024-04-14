@@ -1,5 +1,9 @@
-package net.andrewcpu.solids;
+package net.andrewcpu.solids.behaviors;
+
+import net.andrewcpu.solids.Ether;
 
 public interface SolidBehavior {
-    void interact(double[][] pond, double[][] velocity, int i, int j, double[][] newPond, double[][] newVelocity);
+    void step();
+    ForceRecord interact(Ether[][] grid, int i, int j);
+    boolean isPermeable();
 }

@@ -1,2 +1,6 @@
-package net.andrewcpu.model;public class KeyPairEnum {
+package net.andrewcpu.model;
+
+public interface KeyPairEnum<T,X> {
+    T getKey();
+    X getValue();
 }

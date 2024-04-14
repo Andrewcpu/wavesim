@@ -1,6 +1,8 @@
-package net.andrewcpu.solids.impl;
+package net.andrewcpu.solids.behaviors.impl;
 
-import net.andrewcpu.solids.SolidBehavior;
+import net.andrewcpu.solids.Ether;
+import net.andrewcpu.solids.behaviors.ForceRecord;
+import net.andrewcpu.solids.behaviors.SolidBehavior;
 
 public class PermeableSolid implements SolidBehavior {
     private double permeability;
@@ -13,10 +15,37 @@ public class PermeableSolid implements SolidBehavior {
         this.damping = damping;
     }
 
-    public void interact(double[][] pond, double[][] velocity, int i, int j, double[][] newPond, double[][] newVelocity) {
-        // Example: simple model where permeability affects the wave propagation
-        double laplacian = pond[i-1][j] + pond[i+1][j] + pond[i][j-1] + pond[i][j+1] - 4 * pond[i][j];
-        newVelocity[i][j] = velocity[i][j] * (1 - this.velocityDamping) + laplacian * this.damping * this.permeability;
-        newPond[i][j] = pond[i][j] + newVelocity[i][j] * permeability;
+    @Override
+    public void step() {
+
+    }
+
+    public ForceRecord interact(Ether[][] grid, int i, int j) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        double laplacian = -6 * grid[i][j].getValue();
+
+        // Add orthogonal neighbors with checks for boundaries
+        laplacian += (i > 0 ? grid[i - 1][j].getValue() : 0);
+        laplacian += (i < rows - 1 ? grid[i + 1][j].getValue() : 0);
+        laplacian += (j > 0 ? grid[i][j - 1].getValue() : 0);
+        laplacian += (j < cols - 1 ? grid[i][j + 1].getValue() : 0);
+
+        // Diagonal neighbors with damping at edges
+        double boundaryDamping = 0.5; // Damping factor for edge cells
+        laplacian += (i > 0 && j > 0 ? 0.5 * grid[i - 1][j - 1].getValue() : boundaryDamping * grid[i][j].getValue());
+        laplacian += (i > 0 && j < cols - 1 ? 0.5 * grid[i - 1][j + 1].getValue() : boundaryDamping * grid[i][j].getValue());
+        laplacian += (i < rows - 1 && j > 0 ? 0.5 * grid[i + 1][j - 1].getValue() : boundaryDamping * grid[i][j].getValue());
+        laplacian += (i < rows - 1 && j < cols - 1 ? 0.5 * grid[i + 1][j + 1].getValue() : boundaryDamping * grid[i][j].getValue());
+
+        double deltaVelocity = (laplacian * this.damping * this.permeability) - (grid[i][j].getVelocity() * this.velocityDamping);
+        double deltaValue = deltaVelocity;
+
+        return new ForceRecord(deltaValue, deltaVelocity);
+    }
+
+    @Override
+    public boolean isPermeable() {
+        return permeability > 0.000001;
     }
 }
