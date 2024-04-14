@@ -14,6 +14,10 @@ public class Wormhole extends Ether {
         this.charge = charge;
     }
 
+    public double getCharge() {
+        return charge;
+    }
+
     @Override
     public void render(Graphics g, int i, int j, int x, int y, int w, int h, Ether[][] pond, double value) {
         // Default color is black

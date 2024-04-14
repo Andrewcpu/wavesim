@@ -18,9 +18,11 @@ public class DynamicMaterial extends Ether {
 
     public DynamicMaterial(UUID uuid, SolidBehavior solidBehavior, String render) {
         super(solidBehavior);
+//        setSolidBehavior(solidBehavior);
         this.uuid = uuid;
         this.render = render;
         initializeDynamicInstance(); // Initialize the dynamic instance
+
     }
 
     public void setRender(String render) {
@@ -29,6 +31,8 @@ public class DynamicMaterial extends Ether {
     }
 
     private void initializeDynamicInstance() {
+        this.velocity = 0;
+        this.value = 0;
         try {
             if (!compiledInstances.containsKey(render)) {
                 String classCode = generateClassCode(render);

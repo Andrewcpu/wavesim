@@ -4,10 +4,7 @@ import net.andrewcpu.Pond;
 import net.andrewcpu.gui.state.BehaviorState;
 import net.andrewcpu.model.SelectionListener;
 import net.andrewcpu.solids.Ether;
-import net.andrewcpu.solids.behaviors.impl.BlockingSolid;
-import net.andrewcpu.solids.behaviors.impl.DefaultBehavior;
-import net.andrewcpu.solids.behaviors.impl.PermeableSolid;
-import net.andrewcpu.solids.behaviors.impl.WaveGeneratorBehavior;
+import net.andrewcpu.solids.behaviors.impl.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,6 +56,12 @@ public class MainUI extends JPanel implements SelectionListener {
                 behaviorPanel.loadState(new File(lastSelected));
                 pond.currentMaterial = behaviorPanel.build();
                 pond.updateMaterial(pond.currentMaterial.uuid);
+                File[] updatedFiles = saveDirectory.listFiles();
+                Vector<IconListViewer.IconItem> updatedItems = Arrays.stream(updatedFiles)
+                        .map(e -> new IconListViewer.IconItem(e.getAbsolutePath()))
+                        .collect(Collectors.toCollection(Vector<IconListViewer.IconItem>::new));
+                iconScrollPane.getModel().clear();
+                iconScrollPane.getModel().addAll(updatedItems);
             } catch (Exception e) {
                 e.printStackTrace();
 //                throw new RuntimeException(e);
@@ -72,10 +75,15 @@ public class MainUI extends JPanel implements SelectionListener {
         add(splitPane, BorderLayout.CENTER);
     }
 
+    public void finishedLoading() {
+        behaviorPanel.updateParameterPanel();
+    }
+
     private List<Class<?>> loadBehaviorClasses() {
         List<Class<?>> classes = new ArrayList<>();
         classes.add(BlockingSolid.class);
         classes.add(PermeableSolid.class);
+        classes.add(DefaultDampingBehavior.class);
         classes.add(WaveGeneratorBehavior.class);
         classes.add(DefaultBehavior.class);
         return classes;
@@ -87,6 +95,7 @@ public class MainUI extends JPanel implements SelectionListener {
             lastSelected = filePath;
             behaviorPanel.loadState(new File(filePath));
             pond.currentMaterial = behaviorPanel.build();
+            pond.behaviorPanel = behaviorPanel;
         } catch (Exception ex) {
             ex.printStackTrace();
         }

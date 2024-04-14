@@ -32,15 +32,15 @@ public class ParameterPanel extends JPanel {
                 addParameterField(parameter);
             }
         }
-        saveButton = new JButton("Save");
-        saveButton.addActionListener(e -> saveValues());
-
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = parameterFields.size();
-        constraints.anchor = GridBagConstraints.SOUTHEAST;
-        constraints.insets = new Insets(5, 5, 5, 5);
-        add(saveButton, constraints);
+//        saveButton = new JButton("Save");
+//        saveButton.addActionListener(e -> saveValues());
+//
+//        GridBagConstraints constraints = new GridBagConstraints();
+//        constraints.gridx = 1;
+//        constraints.gridy = parameterFields.size();
+//        constraints.anchor = GridBagConstraints.EAST;
+//        constraints.insets = new Insets(5, 5, 5, 5);
+//        add(saveButton, constraints);
     }
 
     private void addParameterField(Parameter parameter) {
@@ -57,11 +57,14 @@ public class ParameterPanel extends JPanel {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(5, 5, 5, 5);
         add(field.getLabel(), constraints);
+
         constraints.gridx = 1;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1.0;
         add(field.getInputField(), constraints);
     }
 
-    private void saveValues() {
+    public void saveValues() {
         savedValues = new HashMap<>();
         for (Map.Entry<String, ParameterField> entry : parameterFields.entrySet()) {
             String name = entry.getKey();

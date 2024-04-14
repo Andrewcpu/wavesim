@@ -12,7 +12,7 @@ public class ChargedSolidBehavior extends PermeableSolid {
     private double charge; // Charge of the Ether this behavior is attached to
 
     public ChargedSolidBehavior(double charge) {
-        super(1.0, 0.04, DAMPING);
+        super(0.9, 0.001, DAMPING);
         this.charge = charge;
 //        this.oppositeChargedEthers = oppositeChargedEthers;
     }
@@ -26,10 +26,10 @@ public class ChargedSolidBehavior extends PermeableSolid {
         Ether ether = grid[i][j];
         int n = oppositeChargedEthers.size() ;
         ForceRecord forceRecord = super.interact(grid, i, j);
-        double a = forceRecord.deltaForce() * charge / n * 0.9;
-        double b = forceRecord.deltaVelocity() / n * charge * 0.9;
+        double a = forceRecord.deltaForce() / n * charge ;
+        double b = forceRecord.deltaVelocity() / n * charge ;
         for (Ether oppEther : oppositeChargedEthers) {
-            oppEther.applyWave(a, b);
+            oppEther.applyWave(a, 0);
         }
 
 

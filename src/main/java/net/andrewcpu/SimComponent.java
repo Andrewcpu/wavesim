@@ -3,6 +3,7 @@ package net.andrewcpu;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
 
 public class SimComponent extends JComponent implements KeyListener, MouseWheelListener, MouseListener, MouseMotionListener {
     public Pond pond;
@@ -148,6 +149,11 @@ public class SimComponent extends JComponent implements KeyListener, MouseWheelL
             int mouseY = (int) ((e.getY() - scaledY) / (zoomLevel * Pond.TILE_SIZE));
 
             if (mouseX != prevToggledX || mouseY != prevToggledY) {
+                try {
+                    pond.currentMaterial = pond.behaviorPanel.build();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 pond.toggleSolidObject(mouseX, mouseY);
                 prevToggledX = mouseX;
                 prevToggledY = mouseY;

@@ -2,6 +2,7 @@
 
 package net.andrewcpu;
 
+import net.andrewcpu.gui.BehaviorPanel;
 import net.andrewcpu.solids.Ether;
 import net.andrewcpu.solids.behaviors.impl.ChargedSolidBehavior;
 import net.andrewcpu.solids.impl.DynamicMaterial;
@@ -19,8 +20,12 @@ import java.util.concurrent.CompletableFuture;
 public class Pond {
     public static final Map<String, DynamicMaterial> dynamicRegistry = new HashMap<>();
     public static DynamicMaterial currentMaterial;
-    public static final double DAMPING = 0.2;
-    public static final double VELOCITY_DAMPING = 0.08;
+    public static BehaviorPanel behaviorPanel;
+    private final List<Ether> positiveWormholes = new ArrayList<>();
+    private final List<Ether> negativeWormholes = new ArrayList<>();
+
+    public static final double DAMPING = 0.25;
+    public static final double VELOCITY_DAMPING = 0.02;
     public static final int POND_SIZE = 150;
     public static final int TILE_SIZE = 1;
     private Ether[][] etherGrid = new Ether[POND_SIZE][POND_SIZE];
@@ -45,7 +50,7 @@ public class Pond {
         List<Ether> positiveWormholes = new ArrayList<>();
         List<Ether> edgeNegativeWormholes = new ArrayList<>();
         List<Ether> negativeWormholes = new ArrayList<>();
-
+        double f = 1.25;
         for (int i = 0; i < POND_SIZE; i++) {
             for (int j = 0; j < POND_SIZE; j++) {
                 double distPos = Double.MAX_VALUE;
@@ -63,33 +68,47 @@ public class Pond {
                     }
                 }
                 if (distPos < wormholeRadius) {
-                    set(i, j, new Wormhole(1.0));
-                    if (distPos > wormholeRadius - 1) {
-                        edgePositiveWormholes.add(get(i, j));
+                    if (distPos >= wormholeRadius - f) {
+                        set(i, j, new Wormhole(1.0));
+                    } else {
+                        set(i, j, new SolidWall());
                     }
-                    positiveWormholes.add(get(i, j));
                 } else if (distNeg < wormholeRadius) {
-                    set(i, j, new Wormhole(-1.0));
-                    if (distNeg > wormholeRadius - 1) {
-                        edgeNegativeWormholes.add(get(i, j));
+                    if (distNeg >= wormholeRadius - f) {
+                        set(i, j, new Wormhole(-1.0));
+                    } else {
+                        set(i, j, new SolidWall());
                     }
-                    negativeWormholes.add(get(i, j));
                 } else {
                     set(i, j, new RawEther());
                 }
             }
-        }
-        for (Ether pos : positiveWormholes) {
-            ((ChargedSolidBehavior) pos.getSolidBehavior()).setOppositeChargedEthers(edgeNegativeWormholes);
-        }
-        for (Ether neg : negativeWormholes) {
-            ((ChargedSolidBehavior) neg.getSolidBehavior()).setOppositeChargedEthers(edgePositiveWormholes);
         }
     }
 
 
     public void set(int i, int j, Ether ether) {
         etherGrid[i][j] = ether;
+
+        if (ether.getSolidBehavior() instanceof ChargedSolidBehavior) {
+            if (ether instanceof Wormhole) {
+                if (((Wormhole) ether).getCharge() > 0) {
+                    positiveWormholes.add(ether);
+                } else {
+                    negativeWormholes.add(ether);
+                }
+            }
+            updateOppositeCharges();
+        }
+    }
+
+    private void updateOppositeCharges() {
+        for (Ether pos : positiveWormholes) {
+            ((ChargedSolidBehavior) pos.getSolidBehavior()).setOppositeChargedEthers(negativeWormholes);
+        }
+        for (Ether neg : negativeWormholes) {
+            ((ChargedSolidBehavior) neg.getSolidBehavior()).setOppositeChargedEthers(positiveWormholes);
+        }
     }
 
     public Ether get(int i, int j) {
@@ -98,6 +117,8 @@ public class Pond {
 
 
     private void reset() {
+        positiveWormholes.clear();
+        negativeWormholes.clear();
         for (int i = 0; i < POND_SIZE; i++) {
             for (int j = 0; j < POND_SIZE; j++) {
                 if (get(i, j) instanceof RawEther) continue;
@@ -120,6 +141,14 @@ public class Pond {
                 break;
 
         }
+    }
+
+    public static DynamicMaterial getCurrentMaterial() {
+        return currentMaterial;
+    }
+
+    public static void setCurrentMaterial(DynamicMaterial currentMaterial) {
+        Pond.currentMaterial = currentMaterial;
     }
 
     public void toggleSolidObject(int x, int y) {
@@ -194,8 +223,12 @@ public class Pond {
             for (int j = 0; j < POND_SIZE; j++) {
                 if (get(i, j) instanceof DynamicMaterial dynamicMaterial){
                     if(dynamicMaterial.uuid == uuid) {
+                        dynamicMaterial.commit();
+//                        dynamicMaterial.setVelocity();
                         dynamicMaterial.setSolidBehavior(currentMaterial.getSolidBehavior());
                         dynamicMaterial.setRender(currentMaterial.render);
+//                        dynamicMaterial.setValue(0);
+//                        dynamicMaterial.setVelocity(0);
                     }
                 }
             }

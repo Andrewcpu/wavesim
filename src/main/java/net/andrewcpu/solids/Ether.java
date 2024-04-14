@@ -59,6 +59,7 @@ public abstract class Ether {
         forceRecords.clear();
     }
 
+
     public double getVelocity() {
         return velocity;
     }

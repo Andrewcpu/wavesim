@@ -27,7 +27,7 @@ public class BehaviorPanel extends JPanel {
     private JComboBox<Class<?>> behaviorDropdown;
     private JTextArea textArea;
     private JPanel parameterPanel;
-
+    private ParameterPanel parameterSettingsPanel;
     private DynamicConstructionDescription<?> behaviorDescription;
 
     public BehaviorPanel(List<Class<?>> behaviorClasses, File saveDirectory, Runnable onSave) {
@@ -59,7 +59,6 @@ public class BehaviorPanel extends JPanel {
         // South text area and save button
         JPanel southPanel = buildSouthPanel();
         add(southPanel, BorderLayout.SOUTH);
-
         validate();
         repaint();
     }
@@ -99,6 +98,7 @@ public class BehaviorPanel extends JPanel {
         southPanel.add(scrollPane, BorderLayout.CENTER);
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(e -> {
+            parameterSettingsPanel.saveValues();
             try {
                 File file = new File(saveDirectory, currentUUID + ".ser");
                 saveState(file);
@@ -129,13 +129,14 @@ public class BehaviorPanel extends JPanel {
         buildPanel(); // Rebuild the panel to reset
     }
 
-    private void updateParameterPanel() {
+    public void updateParameterPanel() {
         parameterPanel.removeAll(); // Remove all components
 
         Class<?> selectedClass = (Class<?>) behaviorDropdown.getSelectedItem();
         if (selectedClass != null) {
             ParameterPanel panel = new ParameterPanel(selectedClass, this::handleBehaviorDescription);
-            parameterPanel.add(panel, BorderLayout.CENTER); // Ensure this is correctly using BorderLayout
+            this.parameterSettingsPanel = panel;
+            parameterPanel.add(panel, BorderLayout.NORTH); // Ensure this is correctly using BorderLayout
         }
 
 //        parameterPanel.revalidate(); // Recalculate layout
@@ -197,7 +198,7 @@ public class BehaviorPanel extends JPanel {
         ParameterPanel panel = new ParameterPanel((Class<?>) behaviorDropdown.getSelectedItem(), this::handleBehaviorDescription);
         panel.loadParameters(params); // Implement this method in ParameterPanel
         parameterPanel.removeAll();
-        parameterPanel.add(panel, BorderLayout.CENTER);
+        parameterPanel.add(panel, BorderLayout.NORTH);
         revalidate();
         repaint();
     }

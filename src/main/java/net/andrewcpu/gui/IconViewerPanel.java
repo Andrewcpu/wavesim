@@ -80,4 +80,8 @@ public class IconViewerPanel {
             model.set(index, newItem); // Update the item in the model
         }
     }
+
+    public DefaultListModel<IconListViewer.IconItem> getModel() {
+        return model;
+    }
 }
