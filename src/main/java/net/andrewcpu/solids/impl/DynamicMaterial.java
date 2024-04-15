@@ -71,5 +71,17 @@ public class DynamicMaterial extends Ether {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "DynamicMaterial{" +
+                "uuid=" + uuid +
+                ", render='" + render + '\'' +
+                ", dynamicInstance=" + dynamicInstance +
+                ", dynamicMethod=" + dynamicMethod +
+                ", velocity=" + velocity +
+                ", value=" + value +
+                ", forceDampening=" + forceDampening +
+                ", velocityDamping=" + velocityDamping +
+                '}';
+    }
 }

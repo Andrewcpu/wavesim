@@ -87,6 +87,7 @@ public class SidebarUI extends JPanel implements SelectionListener {
         classes.add(DefaultDampingBehavior.class);
         classes.add(WaveGeneratorBehavior.class);
         classes.add(DefaultBehavior.class);
+        classes.add(ChargedSolidBehavior.class);
         return classes;
     }
 

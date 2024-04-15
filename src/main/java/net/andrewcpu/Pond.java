@@ -3,6 +3,7 @@
 package net.andrewcpu;
 
 import net.andrewcpu.gui.panels.BehaviorPanel;
+import net.andrewcpu.model.impl.ChargeEnum;
 import net.andrewcpu.solids.Ether;
 import net.andrewcpu.solids.behaviors.impl.ChargedSolidBehavior;
 import net.andrewcpu.solids.impl.DynamicMaterial;
@@ -46,10 +47,7 @@ public class Pond {
             negativeHoles.add(new Point(negX, negY));
         }
 
-        List<Ether> edgePositiveWormholes = new ArrayList<>();
-        List<Ether> positiveWormholes = new ArrayList<>();
-        List<Ether> edgeNegativeWormholes = new ArrayList<>();
-        List<Ether> negativeWormholes = new ArrayList<>();
+
         double f = 1.25;
         for (int i = 0; i < POND_SIZE; i++) {
             for (int j = 0; j < POND_SIZE; j++) {
@@ -69,13 +67,13 @@ public class Pond {
                 }
                 if (distPos < wormholeRadius) {
                     if (distPos >= wormholeRadius - f) {
-                        set(i, j, new Wormhole(1.0));
+                        set(i, j, new Wormhole(ChargeEnum.POSITIVE));
                     } else {
                         set(i, j, new SolidWall());
                     }
                 } else if (distNeg < wormholeRadius) {
                     if (distNeg >= wormholeRadius - f) {
-                        set(i, j, new Wormhole(-1.0));
+                        set(i, j, new Wormhole(ChargeEnum.NEGATIVE));
                     } else {
                         set(i, j, new SolidWall());
                     }
@@ -90,13 +88,11 @@ public class Pond {
     public void set(int i, int j, Ether ether) {
         etherGrid[i][j] = ether;
 
-        if (ether.getSolidBehavior() instanceof ChargedSolidBehavior) {
-            if (ether instanceof Wormhole) {
-                if (((Wormhole) ether).getCharge() > 0) {
-                    positiveWormholes.add(ether);
-                } else {
-                    negativeWormholes.add(ether);
-                }
+        if (ether.getSolidBehavior() instanceof ChargedSolidBehavior chargedSolidBehavior) {
+            if (chargedSolidBehavior.getCharge() > 0) {
+                positiveWormholes.add(ether);
+            } else {
+                negativeWormholes.add(ether);
             }
             updateOppositeCharges();
         }
@@ -159,6 +155,7 @@ public class Pond {
 //        }
         if(currentMaterial == null) return;
         set(x, y, currentMaterial);
+        System.out.println(currentMaterial);
     }
 
     public void applyForce(int x, int y, double force) {

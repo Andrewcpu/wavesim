@@ -1,8 +1,10 @@
 package net.andrewcpu.solids.behaviors.impl;
 
+import net.andrewcpu.model.impl.ChargeEnum;
 import net.andrewcpu.solids.Ether;
 import net.andrewcpu.model.ForceRecord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static net.andrewcpu.Pond.DAMPING;
@@ -11,13 +13,22 @@ public class ChargedSolidBehavior extends PermeableSolid {
     private List<Ether> oppositeChargedEthers; // List to store opposite charged Ethers
     private double charge; // Charge of the Ether this behavior is attached to
 
-    public ChargedSolidBehavior(double charge) {
+    public ChargedSolidBehavior(ChargeEnum e) {
         super(0.9, 0.001, DAMPING);
-        this.charge = charge;
+        this.charge = e.getValue();
+        this.oppositeChargedEthers = new ArrayList<>();
     }
 
     public void setOppositeChargedEthers(List<Ether> oppositeChargedEthers) {
         this.oppositeChargedEthers = oppositeChargedEthers;
+    }
+
+    public double getCharge() {
+        return charge;
+    }
+
+    public void setCharge(double charge) {
+        this.charge = charge;
     }
 
     @Override

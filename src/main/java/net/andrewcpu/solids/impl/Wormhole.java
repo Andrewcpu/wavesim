@@ -1,5 +1,6 @@
 package net.andrewcpu.solids.impl;
 
+import net.andrewcpu.model.impl.ChargeEnum;
 import net.andrewcpu.solids.Ether;
 import net.andrewcpu.solids.behaviors.impl.ChargedSolidBehavior;
 
@@ -9,9 +10,9 @@ import java.util.List;
 public class Wormhole extends Ether {
     private double charge;
 
-    public Wormhole(double charge) {
-        super(new ChargedSolidBehavior(charge));
-        this.charge = charge;
+    public Wormhole(ChargeEnum e) {
+        super(new ChargedSolidBehavior(e));
+        this.charge = e.getValue();
     }
 
     public double getCharge() {
