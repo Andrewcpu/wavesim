@@ -8,6 +8,8 @@ import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static net.andrewcpu.Pond.POND_SIZE;
+
 public class Main extends JFrame {
     public static void main(String[] args) {
         new Main();
@@ -50,10 +52,10 @@ public class Main extends JFrame {
             }
         }, 20, 20, TimeUnit.MILLISECONDS);
 
-//        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
-//            int randX = (int)(Math.random() * (POND_SIZE - 2)) + 1;
-//            int randY = (int)(Math.random() * (POND_SIZE - 2)) + 1;
-//            simComponent.pond.applyForce(randX, randY, (Math.random() < 0.5 ? -1 : 1) * (int)(Math.random() * 500.0));
-//        }, 2, 2, TimeUnit.SECONDS);
+        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
+            int randX = (int)(Math.random() * (POND_SIZE - 2)) + 1;
+            int randY = (int)(Math.random() * (POND_SIZE - 2)) + 1;
+            simulationComponent.pond.applyForce(randX, randY, (Math.random() < 0.5 ? -1 : 1) * (int)(Math.random() * 500.0));
+        }, 2, 2, TimeUnit.SECONDS);
     }
 }

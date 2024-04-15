@@ -33,6 +33,7 @@ public class Pond {
     private int cursorX = 0, cursorY = 0;
     private boolean positiveBang = true;
     private final int wormholeRadius = 10;
+    private CompletableFuture[] futures = new CompletableFuture[POND_SIZE - 2];
 
     public Pond() {
         // Initialize all cells with a fully permeable behavior by default
@@ -126,7 +127,6 @@ public class Pond {
     public void keyPress(int key) {
         switch (key) {
             case KeyEvent.VK_SPACE:
-                System.out.println(cursorX + ", " + cursorY);
                 applyForce(cursorX, cursorY, (positiveBang ? -1 : 1) * 100.0);
                 break;
             case KeyEvent.VK_R:
@@ -148,14 +148,8 @@ public class Pond {
     }
 
     public void toggleSolidObject(int x, int y) {
-//        if (get(x, y) instanceof RawEther) {
-//            set(x, y, new SolidWall());
-//        } else {
-//            set(x, y, new RawEther());
-//        }
         if(currentMaterial == null) return;
         set(x, y, currentMaterial);
-        System.out.println(currentMaterial);
     }
 
     public void applyForce(int x, int y, double force) {
@@ -163,7 +157,6 @@ public class Pond {
             get(x, y).applyForce(force);
         }
     }
-    private CompletableFuture[] futures = new CompletableFuture[POND_SIZE - 2];
     public void step() {
 
         for (int i = 1; i < POND_SIZE - 1; i++) {
@@ -221,11 +214,8 @@ public class Pond {
                 if (get(i, j) instanceof DynamicMaterial dynamicMaterial){
                     if(dynamicMaterial.uuid == uuid) {
                         dynamicMaterial.commit();
-//                        dynamicMaterial.setVelocity();
                         dynamicMaterial.setSolidBehavior(currentMaterial.getSolidBehavior());
                         dynamicMaterial.setRender(currentMaterial.render);
-//                        dynamicMaterial.setValue(0);
-//                        dynamicMaterial.setVelocity(0);
                     }
                 }
             }
